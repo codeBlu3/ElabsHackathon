@@ -7,7 +7,8 @@ import plotly.graph_objs as go
 
 app= dash.Dash()
 #Our dash will be very simple, just the graph
-app.layout = html.Div([dcc.Graph(id='graph'),
+app.layout = html.Div([ html.Div(children = 'StaySape'),
+                        dcc.Graph(id='graph'),
                        #and four sliders for the paramaters
                       html.Div([html.Div(children='Alpha'),dcc.Slider(id='alpha',
                                      min=1,max=4,step=.05,marks = {1:'1',2:'2',3:'3',4:'4'},
@@ -45,7 +46,7 @@ def update_figure(alpha,beta,gamma,delta):
     layout = go.Layout(title = f'Lotka-Volterra')
     return {'data':data,'layout':layout}
 
-
+# test 
 
 app.run_server(host='0.0.0.0')
 #server = app.server
