@@ -112,7 +112,7 @@ def update_graph_2(jsonified_data):
 # In[5]:
 
 
-app.run_server(host='0.0.0.0', debug = True)
+app.run_server(host='0.0.0.0')
 #server = app.server
 
 
