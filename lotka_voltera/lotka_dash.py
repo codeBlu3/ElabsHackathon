@@ -26,7 +26,7 @@ external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
 app= dash.Dash(__name__, external_stylesheets=external_stylesheets)
 #app.config.suppress_callback_exceptions = True
 #Our dash will be very simple, just the graph
-app.layout = html.Div([html.H1(children = 'staySape',
+app.layout = html.Div([html.H1(children = "staySape's Lotka-Voltera Model Simulation ",
                 style = {
                     'font-size':'320%',
                     'text-align': 'center'
@@ -48,10 +48,10 @@ app.layout = html.Div([html.H1(children = 'staySape',
                                      min=0,max=1,step=.01,marks = {0:'0',.25:'.25',.5:'.5',.75:'.75',1:'1'},
                                      value=.05)]),
                       html.Div([html.Div(children='Prey0'),dcc.Input(id="Prey0", type="number", placeholder="input with range",
-                                    min=10, max=100, step=3, value = 50
+                                    min=5, max=1000, step=5, value = 50
                                     )]),
                        html.Div([html.Div(children='Predator0'),dcc.Input(id="Predator0", type="number", placeholder="input with range",
-                                    min=10, max=100, step=3, value = 50
+                                    min=5, max=1000, step=5, value = 50
                                     )]),
                     html.Div(id='intermediate-value', style={'display': 'none'})
                       ])
@@ -80,6 +80,7 @@ def lotka_sim(X, t, a, b, c, d):
              Input('Prey0','value'),
              Input('Predator0','value')])
 def datasimulate(alpha,beta,gamma,delta,Prey0, Predator0):
+    
     t = np.linspace(0, 15,  1000)
     X0 = np.array([Prey0, Predator0]) 
     X = integrate.odeint(lotka_sim, X0, t, args = (alpha,beta,gamma,delta))
@@ -96,6 +97,7 @@ def update_graph_1(jsonified_data):
     # json.loads(jsonified_cleaned_data)
     ppPop = pd.read_json(jsonified_data)
     figScat = px.scatter(ppPop, x='Prey', y='Predator')
+    figScat.update_layout(title={'text': "Predator-Prey Scatterplot" })
     return figScat
 
 @app.callback(Output('popvpop', 'figure'), [Input('intermediate-value', 'children')])
@@ -106,11 +108,11 @@ def update_graph_2(jsonified_data):
     ppPop = pd.read_json(jsonified_data)
     melted = ppPop.melt(id_vars = 'Time',  var_name='Species', value_name='Population' )
     figLine = px.line(melted, x ='Time', y= 'Population', color = 'Species')
-
+    figLine.update_layout(title={'text': "Population Comparison of Prey and Predator through time"}) 
     return figLine
 
 
-# In[5]:
+# In[ ]:
 
 
 app.run_server(host='0.0.0.0')
